@@ -23,6 +23,26 @@ namespace cteds_projeto_final
         public MainWindow()
         {
             InitializeComponent();
+            fillListBox();
+        }
+
+        private void fillListBox()
+        {
+            lstNames.Items.Add("testando");
+        }
+
+        private void ButtonAddName_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtName.Text) && !lstNames.Items.Contains(txtName.Text))
+            {
+                lstNames.Items.Add(txtName.Text);
+                txtName.Clear();
+            }
+        }
+
+        private void ButtonRemoveName_Click(object sender, RoutedEventArgs e)
+        {
+            lstNames.Items.RemoveAt(lstNames.SelectedIndex);
         }
     }
 }
