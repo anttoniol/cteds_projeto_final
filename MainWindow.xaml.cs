@@ -20,29 +20,26 @@ namespace cteds_projeto_final
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string[] cmbMonthOptions = { "Mês atual", "Meses anteriores" };
         public MainWindow()
         {
             InitializeComponent();
-            fillListBox();
+            initializeComboBox(cmbMonth, cmbMonthOptions);
         }
 
-        private void fillListBox()
+        private void initializeComboBox(ComboBox cmbName, string[] options)
         {
-            lstNames.Items.Add("testando");
-        }
-
-        private void ButtonAddName_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtName.Text) && !lstNames.Items.Contains(txtName.Text))
+            foreach (string option in options) 
             {
-                lstNames.Items.Add(txtName.Text);
-                txtName.Clear();
+                int index = cmbName.Items.Add(option);
             }
         }
 
-        private void ButtonRemoveName_Click(object sender, RoutedEventArgs e)
+        private void checkCmbBox(object sender, SelectionChangedEventArgs e)
         {
-            lstNames.Items.RemoveAt(lstNames.SelectedIndex);
+            object selectedObject = ((ComboBox) sender).SelectedItem;
+            if (selectedObject != null)
+                MessageBox.Show($"Você selecionou '{selectedObject.ToString()}'");
         }
     }
 }

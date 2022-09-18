@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:cteds_projeto_final"
         mc:Ignorable="d"
-        Title="Names" Height="180" Width="260">
+        Title="Controle de Finanças Pessoais" Height="180" Width="260">
     <Grid Margin="10">
 
         <Grid.RowDefinitions>
@@ -14,22 +14,15 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="13*" />
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="99*"/>
+            <ColumnDefinition Width="120*" />
         </Grid.ColumnDefinitions>
-
-        <Label Grid.Column="1">Names</Label>
-        <ListBox Grid.Row="1" x:Name="lstNames" />
-        <StackPanel x:Name="stkPnlMain" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
-            <TextBox x:Name="txtName" />
-            <Button x:Name="btnAdd" Margin="0,5,0,0" Click="ButtonAddName_Click">Add Name</Button>
-            <Button x:Name="btnRemove" Margin="0,5,0,0" Click="ButtonRemoveName_Click">Remove Name</Button>
-        </StackPanel>
-
-
+        <StackPanel x:Name="stkPnlMain" Grid.Row="1" Grid.Column="3" Margin="5,0,0,0"/>
+        <ComboBox x:Name="cmbMonth" Selector.SelectionChanged="checkCmbBox" HorizontalAlignment="Left" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="3" Grid.Column="1"/>
+        <Label Content="Gastos" HorizontalAlignment="Left" Margin="6,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
     </Grid>
-    
-    
 </Window>
     
     
