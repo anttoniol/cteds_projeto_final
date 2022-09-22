@@ -1,8 +1,10 @@
 using System.Data.SQLite;
 
-using FinalProject.Models;
+using cteds_projeto_final.Models;
 
-namespace FinalProject.Repositories
+using System;
+
+namespace cteds_projeto_final.Repositories
 {
     public class CategoryRepository 
     {
@@ -27,7 +29,7 @@ namespace FinalProject.Repositories
                     Category category = new Category(
                         categoryId: (long)rdr["id"],
                         name: rdr["name"].ToString()!,
-                        deleted_dttm: rdr["deleted_dttm"].ToDateTime()!,
+                        deleted_dttm: Convert.ToDateTime(rdr["deleted_dttm"])!
                     );
                     return category;
                 }
@@ -49,7 +51,7 @@ namespace FinalProject.Repositories
                     Category category = new Category(
                         categoryId: (long)rdr["id"],
                         name: rdr["name"].ToString()!,
-                        deleted_dttm: rdr["deleted_dttm"].ToDateTime()!,
+                        deleted_dttm: Convert.ToDateTime(rdr["deleted_dttm"])
                     );
                     return category;
                 }
@@ -69,7 +71,7 @@ namespace FinalProject.Repositories
                 if(rdr.Read())
                 {
                     category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = rdr["deleted_dttm"].ToDateTime()!;
+                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
 
                     return category;
                 }
@@ -83,7 +85,7 @@ namespace FinalProject.Repositories
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
 
-                cmd.Parameters.AddWithValue("@id", category.id);
+                cmd.Parameters.AddWithValue("@id", category.categoryId);
                 cmd.Parameters.AddWithValue("@name", category.name);
 
                 SQLiteDataReader rdr = cmd.ExecuteReader();
@@ -91,7 +93,7 @@ namespace FinalProject.Repositories
                 if(rdr.Read())
                 {
                     category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = rdr["deleted_dttm"].ToDateTime()!;
+                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
 
                     return category;
                 }
@@ -111,7 +113,7 @@ namespace FinalProject.Repositories
                 if(rdr.Read())
                 {
                     category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = rdr["deleted_dttm"].ToDateTime()!;
+                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
 
                     return category;
                 }

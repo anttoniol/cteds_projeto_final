@@ -1,9 +1,9 @@
 using System.Data.SQLite;
 
-using FinalProject.Models;
-using FinalProject.Repositories.Cat;
+using cteds_projeto_final.Models;
+using System;
 
-namespace FinalProject.Repositories
+namespace cteds_projeto_final.Repositories
 {
     public class ExpenseRepository 
     {
@@ -27,10 +27,10 @@ namespace FinalProject.Repositories
                 {
                     Expense expense = new Expense(
                         expenseId: (long)rdr["id"],
-                        value: rdr["value"].ToFloat()!,
+                        value: (float) rdr["value"],
                         desc: rdr["desc"].ToString()!,
-                        category: (long)rdr["category_id"],
-                        added_dttm: rdr["added_dttm"].ToDateTime()!,
+                        category_id: (long) rdr["category_id"],
+                        added_dttm: Convert.ToDateTime(rdr["added_dttm"])
                     );
                     return expense;
                 }
@@ -52,10 +52,10 @@ namespace FinalProject.Repositories
                 {
                     Expense expense = new Expense(
                         expenseId: (long)rdr["id"],
-                        value: rdr["value"].ToFloat()!,
+                        value: (float) rdr["value"],
                         desc: rdr["desc"].ToString()!,
-                        category: (long)rdr["category_id"],
-                        added_dttm: rdr["added_dttm"].ToDateTime()!,
+                        category_id: (long) rdr["category_id"],
+                        added_dttm: Convert.ToDateTime(rdr["added_dttm"])
                     );
                     return expense;
                 }
@@ -77,7 +77,7 @@ namespace FinalProject.Repositories
                 if(rdr.Read())
                 {
                     expense.expenseId = (long)rdr["id"];
-                    expense.added_dttm = rdr["added_dttm"].ToDateTime()!;
+                    expense.added_dttm = Convert.ToDateTime(rdr["added_dttm"]);
                     return expense;
                 }
             }
@@ -89,7 +89,7 @@ namespace FinalProject.Repositories
             string queryString = "UPDATE expenses set value = @value, desc = @desc, category_id = @category_id, added_dttm = @added_dttm where id = @id";
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
-                cmd.Parameters.AddWithValue("@id", expense.id);
+                cmd.Parameters.AddWithValue("@id", expense.expenseId);
                 cmd.Parameters.AddWithValue("@value", expense.value);
                 cmd.Parameters.AddWithValue("@desc", expense.desc);
                 cmd.Parameters.AddWithValue("@category_id", expense.category_id);
@@ -111,7 +111,7 @@ namespace FinalProject.Repositories
             string queryString = "delete from categories WHERE id = @id";
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
-                cmd.Parameters.AddWithValue("@id", expense.id);
+                cmd.Parameters.AddWithValue("@id", expense.expenseId);
                 SQLiteDataReader rdr = cmd.ExecuteReader();
 
                 if(rdr.Read())

@@ -1,11 +1,11 @@
 using System;
 
-namespace FinalProject.Models
+namespace cteds_projeto_final.Models
 {
-    internal class Category
+    public class Category
     {
         public long categoryId;
-        public float name { get; set;}
+        public string name { get; set;}
         public DateTime deleted_dttm { get; set; }
 
         public Category(long categoryId, string name, DateTime deleted_dttm)
