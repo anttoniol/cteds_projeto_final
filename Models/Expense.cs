@@ -4,14 +4,14 @@ namespace cteds_projeto_final.Models
 {
     public class Expense
     {
-        public long expenseId;
+        public long? expenseId;
         public float value { get; set;}
         public string desc { get; set; }
         public long category_id { get; set; }
         public System.DateTime added_dttm { get; set; }
 
 
-        public Expense(long expenseId, float value, string desc, long category_id, DateTime added_dttm)
+        public Expense(float value, string desc, long category_id, DateTime added_dttm, long? expenseId = null)
         {
             this.expenseId = expenseId;
             this.value = value;

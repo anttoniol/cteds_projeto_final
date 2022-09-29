@@ -1,4 +1,4 @@
-CREATE TABLE categories(
+CREATE TABLE IF NOT EXISTS categories(
 	id INTEGER NOT NULL,
 	name TEXT NOT NULL,
 	deleted_dttm datetime NOT NULL default (DATETIME('0')),
@@ -6,7 +6,7 @@ CREATE TABLE categories(
 	CONSTRAINT UC_category UNIQUE (name, deleted_dttm)
 );
 
-CREATE TABLE expenses(
+CREATE TABLE IF NOT EXISTS expenses(
 	id INTEGER NOT NULL,
 	value NUMERIC NOT NULL default 0,
 	desc TEXT,
@@ -15,4 +15,3 @@ CREATE TABLE expenses(
 	CONSTRAINT PK_expenses PRIMARY KEY (id),
 	FOREIGN KEY(category_id) REFERENCES categories(id)
 );
-

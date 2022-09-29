@@ -19,30 +19,34 @@ using authenticator.Configuration;
 
 namespace cteds_projeto_final
 {
+    using Models;
+    using Repositories;
+    using System.IO;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Boolean connectWithDatabase()
+        private CategoryRepository categoryRepository;
+        private ExpenseRepository expenseRepository;
+
+        private SQLiteConnection? connectWithDatabase()
         {
             Config config = ConfigManager.Loader();
-            
+            SQLiteConnection? conn = null;
             try
             {
-                using (SQLiteConnection conn = new SQLiteConnection(config.ConnectionString))
-                {
-                    conn.Open();
-                    MessageBox.Show("Conexão com o banco de dados feita com sucesso");
-                }
-                return true;
+                conn = new SQLiteConnection(config.ConnectionString);
+                conn.Open();
+                MessageBox.Show("Conexão com o banco de dados feita com sucesso");
             }
             catch(Exception ex)
             {
                 MessageBox.Show("Houve problema ao tentar conectar com o banco de dados");
-                return false;
             }
-            
+
+            return conn;   
         }
 
         private string[] cmbMonthOptions = { "Mês atual", "Meses anteriores" };
@@ -51,7 +55,18 @@ namespace cteds_projeto_final
             InitializeComponent();
             initializeComboBox(cmbMonth, cmbMonthOptions);
 
-            connectWithDatabase();
+            SQLiteConnection? conn = connectWithDatabase();
+            if (conn != null)
+            {
+                string queryString = File.ReadAllText("start_db.sql");
+
+                using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+                {
+                    cmd.ExecuteReader();
+                }
+                categoryRepository = new CategoryRepository(conn);
+                expenseRepository = new ExpenseRepository(conn, categoryRepository);
+            }
         }
         private void initializeComboBox(ComboBox cmbName, string[] options)
         {
@@ -76,7 +91,23 @@ namespace cteds_projeto_final
                 MessageBox.Show($"Você selecionou '{selectedItem.ToString()}'");
 
                 string option = selectedItem.ToString();
-                //if (option == "Mês atual")
+                if (option == "Mês atual")
+                {
+                    Category newCategory = new Category("teste");
+                    categoryRepository.AddCategory(newCategory);
+                } else if (option == "Meses anteriores")
+                {
+                    Console.WriteLine("Depois");
+                    
+                    /*
+                    Category newCategory = new Category("teste_expense");
+                    categoryRepository.AddCategory(newCategory);
+
+                    long
+                    Expense newExpense = new Expense(123, "expense test", long category_id, DateTime added_dttm, long ? expenseId = null);
+                    categoryRepository.AddCategory(newCategory);
+                    */
+                }
 
             } 
 

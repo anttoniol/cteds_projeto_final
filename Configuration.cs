@@ -9,7 +9,6 @@ namespace authenticator.Configuration
 		public string LogLevel { get; set; } = "";
 		public string LogPath { get; set; } = "";
 		public string ConnectionString { get; set; } = "";
-		public string Language { get; set; } = "";
 	}
 
 	public class ConfigManager
