@@ -14,7 +14,7 @@
         <Button Content="Adicionar " HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="64" Margin="143,18,0,0" Click="Button_Click"/>
         <Button Content="Atualizar" HorizontalAlignment="Left" Height="30" Margin="212,18,0,0" VerticalAlignment="Top" Width="63"/>
         <Button Content="Remover" Height="30" Margin="280,18,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65"/>
-        <Button Content="Sair" HorizontalAlignment="Left" Height="33" Margin="395,15,0,0" VerticalAlignment="Top" Width="55" RenderTransformOrigin="0.665,0.77" Click="Button_Click"/>
+        <Button Content="Sair" HorizontalAlignment="Left" Height="33" Margin="395,15,0,0" VerticalAlignment="Top" Width="55" RenderTransformOrigin="0.5,0.5" Click="Button_Click_2"/>
 
     </Grid>
 </Window>

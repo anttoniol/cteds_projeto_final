@@ -26,6 +26,12 @@ namespace cteds_projeto_final
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            CategoryActions categoryActions = new CategoryActions();
+            categoryActions.Show();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
             this.Close();
         }
     }
