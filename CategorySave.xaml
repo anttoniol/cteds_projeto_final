@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="cteds_projeto_final.CategorySave"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:cteds_projeto_final"
+             mc:Ignorable="d" Height="46" Width="398">
+    
+    <Grid Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="409">
+        <Label Content="Nome da categoria:" HorizontalAlignment="Left" Margin="0,6,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="26" Width="114">
+        </Label>
+        <TextBox x:Name="txtCategoryName" HorizontalAlignment="Left" Margin="114,11,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226"/>
+        <Button Content="Salvar&#xD;&#xA;" HorizontalAlignment="Left" Margin="345,11,0,0" VerticalAlignment="Top" Width="42" Height="19" Click="Button_Click"/>
+
+    </Grid>
+</UserControl>

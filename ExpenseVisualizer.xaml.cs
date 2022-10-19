@@ -26,44 +26,27 @@ namespace cteds_projeto_final
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ExpenseVisualizer : Window
     {
         private CategoryRepository categoryRepository;
         private ExpenseRepository expenseRepository;
 
-        private SQLiteConnection? connectWithDatabase()
+        public CategoryRepository GetCategoryRepository()
         {
-            Config config = ConfigManager.Loader();
-            SQLiteConnection? conn = null;
-            try
-            {
-                conn = new SQLiteConnection(config.ConnectionString);
-                conn.Open();
-                MessageBox.Show("Conexão com o banco de dados feita com sucesso");
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Houve problema ao tentar conectar com o banco de dados");
-            }
-
-            return conn;   
+            return categoryRepository;
         }
 
+        
+
         private string[] cmbMonthOptions = { "Mês atual", "Meses anteriores" };
-        public MainWindow()
+        public ExpenseVisualizer()
         {
             InitializeComponent();
             initializeComboBox(cmbMonth, cmbMonthOptions);
 
-            SQLiteConnection? conn = connectWithDatabase();
-            if (conn != null)
+            SQLiteConnection? conn = Connection.connectWithDatabase();
+            if (Connection.buildDatabaseContent(conn))
             {
-                string queryString = File.ReadAllText("start_db.sql");
-
-                using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
-                {
-                    cmd.ExecuteReader();
-                }
                 categoryRepository = new CategoryRepository(conn);
                 expenseRepository = new ExpenseRepository(conn, categoryRepository);
             }
@@ -111,6 +94,11 @@ namespace cteds_projeto_final
 
             } 
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

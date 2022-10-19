@@ -17,11 +17,16 @@ namespace cteds_projeto_final
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class CategoryVisualizer : Window
     {
-        public Window1()
+        public CategoryVisualizer()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

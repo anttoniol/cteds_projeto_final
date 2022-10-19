@@ -10,24 +10,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace cteds_projeto_final
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for CategoryActions.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class CategoryActions : Window
     {
-        public UserControl1()
+        public CategoryActions()
         {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CategorySave_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
