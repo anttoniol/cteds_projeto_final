@@ -3,6 +3,8 @@ using System.Data.SQLite;
 using cteds_projeto_final.Models;
 
 using System;
+using System.Data;
+using System.Collections.Generic;
 
 namespace cteds_projeto_final.Repositories
 {
@@ -13,6 +15,37 @@ namespace cteds_projeto_final.Repositories
         public CategoryRepository(SQLiteConnection connection)
         {
             conn = connection;
+        }
+
+        private DateTime? ConvertToDateTime(object obj) 
+        {
+            try
+            {
+                return Convert.ToDateTime(obj);
+            } catch
+            {
+                return null;
+            }
+        }
+
+        public List<Tuple<long, string>> GetAll()
+        {
+            List<Tuple<long, string>> categoriesData = new List<Tuple<long, string>>();
+            string queryString = "SELECT * FROM categories";
+            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            {
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    long id = (long) rdr["id"];
+                    string name = rdr["name"].ToString();
+
+                    Tuple<long, string> tuple = new Tuple<long, string>(id, name);
+                    categoriesData.Add(tuple);
+                }
+            }
+            return categoriesData;
         }
 
         public Category? GetById(long id)
@@ -26,10 +59,21 @@ namespace cteds_projeto_final.Repositories
 
                 if(rdr.Read())
                 {
+                    DateTime? deleted_dttm;
+
+                    try
+                    {
+                        deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    }
+                    catch
+                    {
+                        deleted_dttm = null;
+                    }
+
                     Category category = new Category(
                         categoryId: (long)rdr["id"],
                         name: rdr["name"].ToString()!,
-                        deleted_dttm: Convert.ToDateTime(rdr["deleted_dttm"])!
+                        deleted_dttm: deleted_dttm
                     );
                     return category;
                 }
@@ -42,20 +86,35 @@ namespace cteds_projeto_final.Repositories
             string queryString = "SELECT * FROM categories WHERE name LIKE @name AND deleted_dttm = DATETIME('0')";
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
+
                 cmd.Parameters.AddWithValue("@name", name);
 
                 SQLiteDataReader rdr = cmd.ExecuteReader();
 
-                if(rdr.Read())
+                if (rdr.Read())
                 {
+
+                    DateTime? deleted_dttm;
+
+                    try
+                    {
+                        deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    }
+                    catch
+                    {
+                        deleted_dttm = null;
+                    }
+
                     Category category = new Category(
                         categoryId: (long)rdr["id"],
                         name: rdr["name"].ToString()!,
-                        deleted_dttm: Convert.ToDateTime(rdr["deleted_dttm"])
+                        deleted_dttm: deleted_dttm
                     );
+
                     return category;
                 }
             }
+            
             return null;
         }
 
@@ -66,15 +125,10 @@ namespace cteds_projeto_final.Repositories
             {
                 cmd.Parameters.AddWithValue("@name", category.name);
 
-                SQLiteDataReader rdr = cmd.ExecuteReader();
+                int numberOfRowsInserted = cmd.ExecuteNonQuery();
 
-                if(rdr.Read())
-                {
-                    category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
-
-                    return category;
-                }
+                if (numberOfRowsInserted > 0)
+                    return GetByName(category.name);
             }
             return null;
         }
@@ -92,8 +146,19 @@ namespace cteds_projeto_final.Repositories
 
                 if(rdr.Read())
                 {
-                    category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    DateTime? deleted_dttm;
+
+                    try
+                    {
+                        deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    }
+                    catch
+                    {
+                        deleted_dttm = null;
+                    }
+
+                    category.categoryId = (long) rdr["id"];
+                    category.deleted_dttm = deleted_dttm;
 
                     return category;
                 }
@@ -112,8 +177,19 @@ namespace cteds_projeto_final.Repositories
 
                 if(rdr.Read())
                 {
+                    DateTime? deleted_dttm;
+
+                    try
+                    {
+                        deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    }
+                    catch
+                    {
+                        deleted_dttm = null;
+                    }
+
                     category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    category.deleted_dttm = deleted_dttm;
 
                     return category;
                 }

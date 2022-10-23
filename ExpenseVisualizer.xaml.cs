@@ -76,8 +76,8 @@ namespace cteds_projeto_final
                 string option = selectedItem.ToString();
                 if (option == "Mês atual")
                 {
-                    Category newCategory = new Category("teste");
-                    categoryRepository.AddCategory(newCategory);
+                    // Category newCategory = new Category("teste");
+                    // categoryRepository.AddCategory(newCategory);
                 } else if (option == "Meses anteriores")
                 {
                     Console.WriteLine("Depois");

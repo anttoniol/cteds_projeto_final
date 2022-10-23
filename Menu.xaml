@@ -5,10 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:cteds_projeto_final"
         mc:Ignorable="d"
-        Title="Opções" Height="168" Width="337" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
-    <Grid HorizontalAlignment="Center" Width="349" Height="157" VerticalAlignment="Top">
-        <Button Content="Gastos" Margin="145,59,0,43" Click="Button_Click" HorizontalAlignment="Left" Width="84"/>
-        <Button Content="Categorias" HorizontalAlignment="Left" Height="55" Margin="39,59,0,0" VerticalAlignment="Top" Width="83" Click="Button_Click_1"/>
-        <Button Content="Sair" HorizontalAlignment="Left" Height="33" Margin="278,10,0,0" VerticalAlignment="Top" Width="55" RenderTransformOrigin="0.665,0.77" Click="Button_Click_2"/>
+        Title="Controle de Finanças Pessoais" Width="{x:Static SystemParameters.PrimaryScreenWidth}" Height="{x:Static SystemParameters.PrimaryScreenHeight}" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowState="Maximized">
+    <Grid HorizontalAlignment="Center" Width="{x:Static SystemParameters.PrimaryScreenWidth}" Height="{x:Static SystemParameters.PrimaryScreenHeight}" VerticalAlignment="Top">
+        <Menu Height="18" VerticalAlignment="Top">
+            <MenuItem Header="Categorias">
+                <MenuItem Header="Adicionar" Click="AddCategory"/>
+                <MenuItem Header="Atualizar" Click="UpdateCategory"/>
+            </MenuItem>
+            <MenuItem Header="Gastos">
+                <MenuItem Header="Adicionar" Click="AddExpense"/>
+                <MenuItem Header="Atualizar" Click="UpdateExpense"/>
+                <MenuItem Header="Remover" Click="DeleteExpense"/>
+            </MenuItem>
+            <MenuItem Header="Sair" Click="CloseWindow"/>
+        </Menu>
     </Grid>
 </Window>

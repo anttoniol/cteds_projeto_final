@@ -24,21 +24,36 @@ namespace cteds_projeto_final
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AddCategory(object sender, RoutedEventArgs e)
+        {
+            CategoryAdd categoryAdd = new CategoryAdd();
+            categoryAdd.Show();
+        }
+
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void AddExpense(object sender, RoutedEventArgs e)
         {
             ExpenseVisualizer expenseVisualizer = new ExpenseVisualizer();
             expenseVisualizer.Show();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void UpdateExpense(object sender, RoutedEventArgs e)
         {
-            CategoryVisualizer categoryVisualizer = new CategoryVisualizer();
-            categoryVisualizer.Show();
+
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void DeleteExpense(object sender, RoutedEventArgs e)
         {
-           this.Close();
+
+        }
+
+        private void UpdateCategory(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
