@@ -110,25 +110,31 @@ namespace cteds_projeto_final
 
         private void InsertCategoryIcon(Category? category, int row)
         {
-            BitmapImage bitmap;
-            if (category.icon != null)
+            try
             {
-                bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.StreamSource = new MemoryStream(category.icon);
-                bitmap.EndInit();
-            }
-            else
-                bitmap = null;
+                BitmapImage bitmap;
+                if (category.icon != null)
+                {
+                    bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new MemoryStream(category.icon);
+                    bitmap.EndInit();
+                }
+                else
+                    bitmap = null;
 
-            if (bitmap != null)
+                if (bitmap != null)
+                {
+                    Image icon = new Image();
+                    icon.Source = bitmap;
+                    icon.Stretch = Stretch.Uniform;
+                    icon.Width = 20;
+                    icon.Height = 20;
+                    InsertChildOnCategoryGrid(icon, row, 2);
+                }
+            } catch
             {
-                Image icon = new Image();
-                icon.Source = bitmap;
-                icon.Stretch = Stretch.Uniform;
-                icon.Width = 20;
-                icon.Height = 20;
-                InsertChildOnCategoryGrid(icon, row, 2);
+                return;
             }
         }
 
@@ -376,9 +382,6 @@ namespace cteds_projeto_final
             if (fileDialog.ShowDialog() == true)
                 txtIcon.Text = fileDialog.FileName;
         }
-
-       
-
         private void ClearFields(object sender, RoutedEventArgs e)
         {
             ClearFields();
