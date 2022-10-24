@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace cteds_projeto_final
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
     public partial class Menu : Window
     {
         public Menu()
@@ -26,13 +23,19 @@ namespace cteds_projeto_final
 
         private void AddCategory(object sender, RoutedEventArgs e)
         {
-            CategoryAdd categoryAdd = new CategoryAdd();
-            categoryAdd.Show();
+            CategoryOperations categoryOperations = new CategoryOperations("add");
+            categoryOperations.Show();
+        }
+
+        private void UpdateCategory(object sender, RoutedEventArgs e)
+        {
+            CategoryOperations categoryOperations = new CategoryOperations("update");
+            categoryOperations.Show();
         }
 
         private void CloseWindow(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
 
         private void AddExpense(object sender, RoutedEventArgs e)
@@ -47,11 +50,6 @@ namespace cteds_projeto_final
         }
 
         private void DeleteExpense(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void UpdateCategory(object sender, RoutedEventArgs e)
         {
 
         }

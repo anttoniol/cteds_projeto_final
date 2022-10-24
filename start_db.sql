@@ -1,13 +1,15 @@
 CREATE TABLE IF NOT EXISTS categories(
 	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL,
-	deleted_dttm datetime DEFAULT (DATETIME('0')),
-	CONSTRAINT UC_category UNIQUE (name, deleted_dttm)
+	color TEXT,
+	icon BLOB,
+	added_dttm datetime NOT NULL, 
+	CONSTRAINT UC_category UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS expenses(
 	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	value NUMERIC NOT NULL default 0,
+	value NUMERIC NOT NULL,
 	desc TEXT,
 	category_id INTEGER NOT NULL,
 	added_dttm datetime NOT NULL,

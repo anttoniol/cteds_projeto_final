@@ -6,14 +6,17 @@ namespace cteds_projeto_final.Models
     {
         public long? categoryId;
         public string name { get; set;}
-        public DateTime? deleted_dttm { get; set; }
+        public string color { get; set; }
+        public byte[] icon { get; set; }
+        public DateTime? added_dttm { get; set; }
 
-        public Category(string name, long? categoryId = null, DateTime? deleted_dttm = null)
+        public Category(string name, string color = null, byte[] icon = null, long? categoryId = null, DateTime? added_dttm = null)
         {
-            this.categoryId = categoryId;
             this.name = name;
-            this.deleted_dttm = deleted_dttm; 
+            this.color = color;
+            this.icon = icon;
+            this.categoryId = categoryId;
+            this.added_dttm = added_dttm;
         }
-
     }
 }

@@ -37,9 +37,9 @@ public class Connection
             }
             return true;
         } 
-        catch
+        catch(Exception ex)
         {
-            MessageBox.Show("Erro ao construir banco de dados!");
+            MessageBox.Show("Erro ao construir banco de dados!: " + ex.Message);
             return false;
         }
         
