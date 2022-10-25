@@ -6,23 +6,23 @@
         xmlns:local="clr-namespace:cteds_projeto_final"
         xmlns:controls="clr-namespace:cteds_projeto_final"
         mc:Ignorable="d"
-        Title="Gastos" Height="529" Width="575" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
+        Title="Gastos" Height="529" Width="740" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
     <Grid Margin="10,10,10,12">
-        <Button Content="Adicionar&#xD;&#xA;Gasto " HorizontalAlignment="Left" Height="43" VerticalAlignment="Top" Width="64" Margin="135,134,0,0" Click="AddExpense"/>
-        <Button Content="Salvar &#xD;&#xA;Alterações" HorizontalAlignment="Left" Height="43" Margin="210,134,0,0" VerticalAlignment="Top" Width="61"/>
-        <Label Content="Descrição:" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top"/>
-        <Label Content="Categoria:" HorizontalAlignment="Left" Margin="62,77,0,0" VerticalAlignment="Top"/>
-        <Label Content="Valor:" HorizontalAlignment="Left" Margin="62,36,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.037,0.556" Width="38"/>
-        <Label Content="Data:" HorizontalAlignment="Left" Margin="289,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.047,0.271"/>
-        <Button Content="Limpar" HorizontalAlignment="Left" Height="44" Margin="361,133,0,0" VerticalAlignment="Top" Width="61" Click="ClearFields"/>
-        <Button Content="Remover&#xD;&#xA;Gasto" HorizontalAlignment="Left" Height="44" Margin="287,134,0,0" VerticalAlignment="Top" Width="61"/>
-        <ComboBox x:Name="cmbCategory" HorizontalAlignment="Left" Margin="131,81,0,0" VerticalAlignment="Top" Width="255"/>
-        <Button Content="Inserir Nova&#xD;&#xA;Categoria " HorizontalAlignment="Left" Height="43" VerticalAlignment="Top" Width="81" Margin="401,68,0,0" Click="InsertNewCategory"/>
-        <TextBox x:Name="txtDesc" Margin="131,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351"/>
-        <TextBox x:Name="txtValue" HorizontalAlignment="Left" Margin="108,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="177" InputScope="DateMonth"/>
-        <DatePicker x:Name="dpExpense" HorizontalAlignment="Left" Margin="332,39,0,0" VerticalAlignment="Top" Width="150"/>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" Width="535" Margin="0,197,0,10">
-            <Grid x:Name="grdExpense" ShowGridLines="True" Margin="0,199,0,10"/>
+        <Button Content="Adicionar&#xD;&#xA;Gasto " HorizontalAlignment="Left" Height="43" VerticalAlignment="Top" Width="64" Margin="205,134,0,0" Click="AddExpense"/>
+        <Button x:Name="btnUpdateExpense" Content="Salvar &#xD;&#xA;Alterações" HorizontalAlignment="Left" Height="43" Margin="280,134,0,0" VerticalAlignment="Top" Width="61" Click="UpdateExpense"/>
+        <Label Content="Descrição:" HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Categoria:" HorizontalAlignment="Left" Margin="132,77,0,0" VerticalAlignment="Top"/>
+        <Label Content="Valor:" HorizontalAlignment="Left" Margin="158,36,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.037,0.556" Width="38"/>
+        <Label Content="Data:" HorizontalAlignment="Left" Margin="359,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.047,0.271"/>
+        <Button Content="Limpar" HorizontalAlignment="Left" Height="44" Margin="431,133,0,0" VerticalAlignment="Top" Width="61" Click="ClearFields"/>
+        <Button Content="Remover&#xD;&#xA;Gasto" HorizontalAlignment="Left" Height="44" Margin="357,134,0,0" VerticalAlignment="Top" Width="61"/>
+        <ComboBox x:Name="cmbCategory" HorizontalAlignment="Left" Margin="201,81,0,0" VerticalAlignment="Top" Width="255"/>
+        <Button Content="Inserir Nova&#xD;&#xA;Categoria " HorizontalAlignment="Left" Height="43" VerticalAlignment="Top" Width="81" Margin="471,68,0,0" Click="InsertNewCategory"/>
+        <TextBox x:Name="txtDesc" Margin="201,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351"/>
+        <TextBox x:Name="txtValue" HorizontalAlignment="Left" Margin="201,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154" InputScope="DateMonth"/>
+        <DatePicker x:Name="dpExpense" HorizontalAlignment="Left" Margin="402,39,0,0" VerticalAlignment="Top" Width="150"/>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" Width="700" Margin="0,197,0,10">
+            <Grid x:Name="grdExpense" ShowGridLines="True" Height="262"/>
         </ScrollViewer>
     </Grid>
 </Window>

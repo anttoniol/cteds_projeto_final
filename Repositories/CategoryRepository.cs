@@ -18,17 +18,18 @@ namespace cteds_projeto_final.Repositories
             conn = connection;
         }
 
-        private Category ReadCategoryData(SQLiteDataReader rdr)
+        private Category ReadCategoryDataAux(SQLiteDataReader rdr)
         {
             byte[]? icon;
             try
             {
-                icon = (byte[]?) rdr["icon"];
-            } catch
+                icon = (byte[]?)rdr["icon"];
+            }
+            catch
             {
                 icon = null;
             }
-            
+
             DateTime? added_dttm;
             try
             {
@@ -43,10 +44,17 @@ namespace cteds_projeto_final.Repositories
                 name: rdr["name"].ToString()!,
                 color: rdr["color"].ToString(),
                 icon: icon,
-                categoryId: (long?) rdr["id"],
+                categoryId: (long?)rdr["id"],
                 added_dttm: added_dttm
             );
             return category;
+        }
+
+        private Category? ReadCategoryData(SQLiteDataReader rdr)
+        {
+            if (rdr.Read())
+                return ReadCategoryDataAux(rdr);
+            return null;
         }
 
         public List<Category> GetAll()
@@ -58,7 +66,7 @@ namespace cteds_projeto_final.Repositories
                 SQLiteDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
-                    categoryList.Add(ReadCategoryData(rdr));
+                    categoryList.Add(ReadCategoryDataAux(rdr));
                 return categoryList;
             }
         }
@@ -82,9 +90,7 @@ namespace cteds_projeto_final.Repositories
                 cmd.Parameters.AddWithValue("@name", name);
                 cmd.Parameters.AddWithValue("@id", id);
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                if (rdr.Read())
-                    return ReadCategoryData(rdr);
-                return null;
+                return ReadCategoryData(rdr);
             }
         }
 
@@ -95,8 +101,7 @@ namespace cteds_projeto_final.Repositories
             {
                 cmd.Parameters.AddWithValue("@name", name);
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                if (rdr.Read())
-                    return ReadCategoryData(rdr);
+                return ReadCategoryData(rdr);
                 return null;
             }
         }

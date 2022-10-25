@@ -2,6 +2,7 @@ using System.Data.SQLite;
 
 using cteds_projeto_final.Models;
 using System;
+using System.Collections.Generic;
 
 namespace cteds_projeto_final.Repositories
 {
@@ -14,6 +15,47 @@ namespace cteds_projeto_final.Repositories
             conn = connection;
         }
 
+        public List<Expense> GetAll()
+        {
+            List<Expense> expenseList = new List<Expense>();
+            string queryString = "SELECT * FROM expenses";
+            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            {
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    Expense expense = new Expense(
+                       expenseId: (long) rdr["id"],
+                       value: float.Parse(rdr["value"].ToString()),
+                       desc: rdr["desc"].ToString()!,
+                       category_id: (long) rdr["category_id"],
+                       added_dttm: Convert.ToDateTime(rdr["added_dttm"]),
+                       expense_dttm: Convert.ToDateTime(rdr["expense_dttm"])
+                    );
+                    expenseList.Add(expense);
+                }
+                return expenseList;
+            }
+        }
+
+        private Expense? ReadExpenseData(SQLiteDataReader rdr)
+        {
+            if (rdr.Read())
+            {
+                Expense expense = new Expense(
+                    expenseId: (long) rdr["id"],
+                    value: float.Parse(rdr["value"].ToString()),
+                    desc: rdr["desc"].ToString()!,
+                    category_id: (long) rdr["category_id"],
+                    added_dttm: Convert.ToDateTime(rdr["added_dttm"]),
+                    expense_dttm: Convert.ToDateTime(rdr["expense_dttm"])
+                );
+                return expense;
+            }
+            return null;
+        }
+
         public Expense? GetById(long id)
         {
             string queryString = "SELECT * FROM expenses WHERE id = @id";
@@ -22,21 +64,8 @@ namespace cteds_projeto_final.Repositories
                 cmd.Parameters.AddWithValue("@id", id);
 
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
-                {
-                    Expense expense = new Expense(
-                        expenseId: (long)rdr["id"],
-                        value: (float) rdr["value"],
-                        desc: rdr["desc"].ToString()!,
-                        category_id: (long) rdr["category_id"],
-                        added_dttm: Convert.ToDateTime(rdr["added_dttm"]),
-                        expense_dttm: Convert.ToDateTime(rdr["expense_dttm"])
-                    );
-                    return expense;
-                }
+                return ReadExpenseData(rdr);
             }
-            return null;
         }
 
         public Expense? GetByDesc(string desc)
@@ -47,20 +76,7 @@ namespace cteds_projeto_final.Repositories
                 cmd.Parameters.AddWithValue("@desc", desc);
 
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if (rdr.Read())
-                {
-                    Expense expense = new Expense(
-                        expenseId: (long) rdr["id"],
-                        value: (float) rdr["value"],
-                        desc: rdr["desc"].ToString()!,
-                        category_id: (long) rdr["category_id"],
-                        added_dttm: Convert.ToDateTime(rdr["added_dttm"]),
-                        expense_dttm: Convert.ToDateTime(rdr["expense_dttm"])
-                    );
-                    return expense;
-                }
-                return null;
+                return ReadExpenseData(rdr);
             }
         }
 
@@ -73,21 +89,7 @@ namespace cteds_projeto_final.Repositories
                 cmd.Parameters.AddWithValue("@end", end);
 
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
-                {
-                    Expense expense = new Expense(
-                        expenseId: (long)rdr["id"],
-                        value: (float) rdr["value"],
-                        desc: rdr["desc"].ToString()!,
-                        category_id: (long) rdr["category_id"],
-                        added_dttm: Convert.ToDateTime(rdr["added_dttm"]),
-                        expense_dttm: Convert.ToDateTime(rdr["expense_dttm"])
-
-                    );
-                    return expense;
-                }
-                return null;
+                return ReadExpenseData(rdr);
             }
         }
 
