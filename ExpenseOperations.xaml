@@ -1,0 +1,30 @@
+﻿<Window x:Class="cteds_projeto_final.ExpenseOperations"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:cteds_projeto_final"
+        xmlns:controls="clr-namespace:cteds_projeto_final"
+        mc:Ignorable="d"
+        Title="Gastos" Height="529" Width="575" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
+    <Grid Margin="10,10,10,12">
+        <Button Content="Adicionar&#xD;&#xA;Gasto " HorizontalAlignment="Left" Height="43" VerticalAlignment="Top" Width="64" Margin="135,134,0,0"/>
+        <Button Content="Salvar &#xD;&#xA;Alterações" HorizontalAlignment="Left" Height="43" Margin="210,134,0,0" VerticalAlignment="Top" Width="61"/>
+        <Label Content="Descrição:" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Categoria:" HorizontalAlignment="Left" Margin="62,77,0,0" VerticalAlignment="Top"/>
+        <Label Content="Valor:" HorizontalAlignment="Left" Margin="62,36,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.037,0.556" Width="38"/>
+        <Label Content="Data:" HorizontalAlignment="Left" Margin="289,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.047,0.271"/>
+        <Button Content="Limpar" HorizontalAlignment="Left" Height="44" Margin="361,133,0,0" VerticalAlignment="Top" Width="61" Click="ClearFields"/>
+        <Button Content="Remover&#xD;&#xA;Gasto" HorizontalAlignment="Left" Height="44" Margin="287,134,0,0" VerticalAlignment="Top" Width="61"/>
+        <ComboBox x:Name="cmbCategory" HorizontalAlignment="Left" Margin="131,81,0,0" VerticalAlignment="Top" Width="255"/>
+        <Button Content="Inserir Nova&#xD;&#xA;Categoria " HorizontalAlignment="Left" Height="43" VerticalAlignment="Top" Width="81" Margin="401,68,0,0" Click="InsertNewCategory"/>
+        <TextBox x:Name="txtDesc" Margin="131,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351"/>
+        <TextBox x:Name="txtValue" HorizontalAlignment="Left" Margin="108,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="177" InputScope="DateMonth"/>
+        <DatePicker x:Name="dpExpense" HorizontalAlignment="Left" Margin="332,39,0,0" VerticalAlignment="Top" Width="150"/>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" Width="535" Margin="0,197,0,10">
+            <Grid x:Name="grdExpense" ShowGridLines="True" Margin="0,199,0,10"/>
+        </ScrollViewer>
+    </Grid>
+</Window>
+    
+    

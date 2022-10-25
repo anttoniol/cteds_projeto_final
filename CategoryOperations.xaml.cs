@@ -149,19 +149,28 @@ namespace cteds_projeto_final
             InsertChildOnCategoryGrid(button, row, 3);
         }
 
+        private void EnableFieldsUpdate()
+        {
+            txtCategoryName.IsEnabled = true;
+            btnAddCategory.IsEnabled = true;
+            btnUpdateCategory.IsEnabled = true;
+            btnColor.IsEnabled = true;
+            btnIcon.IsEnabled = true;
+        }
+
         private void FillFieldsToEdit(object sender, EventArgs e)
         {
             Button clickedButton = (Button) sender;
             Tuple<Category?, int> tag = (Tuple<Category?, int>) clickedButton.Tag;
             Category? category = (Category?) tag.Item1;
             txtCategoryName.Text = category.name;
-            btnUpdateCategory.IsEnabled = true;
             btnUpdateCategory.Click -= UpdateCategory;
             btnUpdateCategory.Click += UpdateCategory;
             btnUpdateCategory.Tag = tag;
 
             Color categoryColor = (Color) ColorConverter.ConvertFromString(category.color);
             recColor.Fill = new SolidColorBrush(categoryColor);
+            EnableFieldsUpdate();
         }
 
         private void updateGridRow(Category? category, int row)
@@ -202,9 +211,11 @@ namespace cteds_projeto_final
 
         private void InsertCategoryOnGrid(Category? category, int row, double? heightDelta = 20)
         {
-            grdCategory.RowDefinitions.Add(new RowDefinition());
             if (heightDelta != null)
-                grdCategory.Height += (double) heightDelta; 
+            {
+                grdCategory.RowDefinitions.Add(new RowDefinition());
+                grdCategory.Height += (double) heightDelta;
+            }
             InsertCategoryName(category.name, row);
             InsertCategoryColor(category.color, row);
             InsertCategoryIcon(category, row);
@@ -377,7 +388,7 @@ namespace cteds_projeto_final
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.DefaultExt = ".png"; // Required file extension
-            fileDialog.Filter = "Image files (*.png, *.bmp, *.jpg)|*.png;*.bmp;*.jpg";
+            fileDialog.Filter = "Image files (*.bmp)|*.bmp";
 
             if (fileDialog.ShowDialog() == true)
                 txtIcon.Text = fileDialog.FileName;

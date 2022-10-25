@@ -13,5 +13,8 @@ CREATE TABLE IF NOT EXISTS expenses(
 	desc TEXT,
 	category_id INTEGER NOT NULL,
 	added_dttm datetime NOT NULL,
-	FOREIGN KEY(category_id) REFERENCES categories(id)
+	expense_dttm datetime NOT NULL,
+	FOREIGN KEY(category_id) REFERENCES categories(id),
+	CONSTRAINT UC_expense UNIQUE (desc)
+
 );

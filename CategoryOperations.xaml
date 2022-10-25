@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:cteds_projeto_final"
         mc:Ignorable="d"
-        Title="Categoria" Height="382" Width="585" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" AutomationProperties.IsOffscreenBehavior="Default">
+        Title="Categoria" Height="490" Width="585" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" AutomationProperties.IsOffscreenBehavior="Default">
     <Grid Margin="0,0,0,12" HorizontalAlignment="Center" Width="565">
-        <TextBox x:Name="txtCategoryName" Margin="94,16,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="413"/>
-        <Label Content="Nome:" HorizontalAlignment="Left" Margin="44,12,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnAddCategory" Content="Adicionar&#xD;&#xA;Categoria" Margin="256,80,0,0" VerticalAlignment="Top" Height="42" Click="AddCategory" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Left" Width="72"/>
-        <Label Content="Cor:" HorizontalAlignment="Left" Margin="44,85,0,0" VerticalAlignment="Top" Width="36"/>
-        <Label Content="Ícone:" HorizontalAlignment="Left" Margin="44,47,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.265,0.564"/>
-        <TextBox x:Name="txtIcon" Height="18" Margin="95,52,139,0" VerticalAlignment="Top" IsEnabled="False"/>
-        <Button x:Name="btnIcon" Height="33" Content="Browse" Click="SearchIcon" Margin="435,39,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72"/>
-        <Button x:Name="btnColor" Content="Escolher" Margin="94,85,0,0" VerticalAlignment="Top" Height="29" Click="ShowColorPicker" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Left" Width="64"/>
-        <Rectangle x:Name="recColor" Margin="0,83,347,0" Stroke="Black" Width="41" HorizontalAlignment="Right" Height="29" VerticalAlignment="Top"/>
-        <ScrollViewer Margin="10,139,0,10" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" Width="542">
+        <TextBox x:Name="txtCategoryName" Margin="70,16,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="482"/>
+        <Label Content="Nome:" HorizontalAlignment="Left" Margin="20,12,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnAddCategory" Content="Adicionar&#xD;&#xA;Categoria" Margin="159,144,0,0" VerticalAlignment="Top" Height="42" Click="AddCategory" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Left" Width="72"/>
+        <Label Content="Cor:" HorizontalAlignment="Left" Margin="20,85,0,0" VerticalAlignment="Top" Width="36"/>
+        <Label Content="Ícone:" HorizontalAlignment="Left" Margin="20,47,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.265,0.564"/>
+        <TextBox x:Name="txtIcon" Height="18" Margin="71,52,104,0" VerticalAlignment="Top" IsEnabled="False"/>
+        <Button x:Name="btnIcon" Height="33" Content="Browse" Click="SearchIcon" Margin="480,45,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72"/>
+        <Button x:Name="btnColor" Content="Escolher" Margin="70,85,0,0" VerticalAlignment="Top" Height="29" Click="ShowColorPicker" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Left" Width="64"/>
+        <Rectangle x:Name="recColor" Margin="0,85,385,0" Width="41" HorizontalAlignment="Right" Height="29" VerticalAlignment="Top"/>
+        <ScrollViewer Margin="10,207,0,10" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" Width="542">
             <Grid x:Name="grdCategory" Height="201" ScrollViewer.HorizontalScrollBarVisibility="Visible" ShowGridLines="True" ScrollViewer.CanContentScroll="True"/>
         </ScrollViewer>
-        <Button x:Name="btnUpdateCategory" Content="Salvar &#xD;&#xA;Alterações" Margin="344,80,0,0" VerticalAlignment="Top" Height="42" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Left" Width="72"/>
-        <Button x:Name="btnClear" Content="Limpar" Margin="435,80,0,0" VerticalAlignment="Top" Height="42" Click="ClearFields" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Left" Width="72"/>
+        <Button x:Name="btnUpdateCategory" Content="Salvar &#xD;&#xA;Alterações" Margin="0,144,0,0" VerticalAlignment="Top" Height="42" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Center" Width="72"/>
+        <Button x:Name="btnClear" Content="Limpar" Margin="338,144,0,0" VerticalAlignment="Top" Height="42" Click="ClearFields" RenderTransformOrigin="0.521,0.872" HorizontalAlignment="Left" Width="72"/>
     </Grid>
 </Window>
