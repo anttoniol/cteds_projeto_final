@@ -193,8 +193,7 @@ namespace cteds_projeto_final
             Category? category = (Category?) tag.Item1;
             long? categoryId = category.categoryId;
 
-            bool ok = CheckFieldsUpdate(categoryId);
-            if (ok)
+            if (CheckFieldsUpdate(categoryId))
             {
                 Category? updatedCategory = categoryRepository.UpdateCategory(FormatFields(categoryId));
                 if (updatedCategory != null)
@@ -360,8 +359,7 @@ namespace cteds_projeto_final
 
         private void AddCategory(object sender, RoutedEventArgs e)
         {
-            bool ok = CheckFieldsAdd();
-            if (ok)
+            if (CheckFieldsAdd())
             {
                 Category? savedCategory = categoryRepository.AddCategory(FormatFields());
                 if (savedCategory != null)

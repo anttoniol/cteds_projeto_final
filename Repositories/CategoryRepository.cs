@@ -18,7 +18,7 @@ namespace cteds_projeto_final.Repositories
             conn = connection;
         }
 
-        private Category? ReadCategoryData(SQLiteDataReader rdr)
+        private Category ReadCategoryData(SQLiteDataReader rdr)
         {
             byte[]? icon;
             try
@@ -49,19 +49,16 @@ namespace cteds_projeto_final.Repositories
             return category;
         }
 
-        public List<Category?> GetAll()
+        public List<Category> GetAll()
         {
-            List<Category?> categoryList = new List<Category?>();
+            List<Category> categoryList = new List<Category>();
             string queryString = "SELECT * FROM categories";
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
                 SQLiteDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
-                {
-                    Category? category = ReadCategoryData(rdr);
-                    categoryList.Add(category);
-                }
+                    categoryList.Add(ReadCategoryData(rdr));
                 return categoryList;
             }
         }
