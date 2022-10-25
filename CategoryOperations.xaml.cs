@@ -176,13 +176,16 @@ namespace cteds_projeto_final
         private void updateGridRow(Category? category, int row)
         {
             UIElementCollection childrenEnumerator = grdCategory.Children;
+            List<UIElement> childrenInRow = new List<UIElement>();
             for (int i = 0; i < childrenEnumerator.Count; i++)
             {
                 if (Grid.GetRow(childrenEnumerator[i]) == row)
-                {
-                    grdCategory.Children.Remove(childrenEnumerator[i]);
-                }
+                    childrenInRow.Add(childrenEnumerator[i]);
             }
+
+            foreach (UIElement child in childrenInRow)
+                grdCategory.Children.Remove(child);
+
             InsertCategoryOnGrid(category, row, null);
         }
 

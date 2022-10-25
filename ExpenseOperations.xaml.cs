@@ -28,7 +28,7 @@ namespace cteds_projeto_final
         }        
 
         private string[] cmbMonthOptions = { "Mês atual", "Meses anteriores" };
-        public ExpenseOperations()
+        public ExpenseOperations(string operation)
         {
             InitializeComponent();
 
@@ -39,26 +39,50 @@ namespace cteds_projeto_final
                 expenseRepository = new ExpenseRepository(conn, categoryRepository);
                 FillCmbCategory();
                 InsertContentIntoExpenseGrid();
+                CheckOperation(operation);
+                dpExpense.DisplayDateEnd = DateTime.Now;
             }
         }
-        private void initializeComboBox(ComboBox cmbName, string[] options)
+
+        private void CheckOperation(string operation)
         {
-            foreach (string option in options) 
+            switch (operation)
             {
-                int index = cmbName.Items.Add(option);
+                case "add":
+                    SetFieldsStatusAdd();
+                    break;
+                case "update":
+                    SetFieldsStatusUpdate();
+                    break;
+                default:
+                    break;
             }
         }
 
-        private void checkCmbBox(object sender, SelectionChangedEventArgs e)
+        private void CheckComboBoxNumberOfOptions(ComboBox comboBox)
         {
-            object selectedObject = ((ComboBox) sender).SelectedItem;
-            if (selectedObject != null)
-                MessageBox.Show($"Você selecionou '{selectedObject.ToString()}'");
+            if (comboBox.Items.Count > 0)
+                comboBox.IsEnabled = true;
+            else
+                comboBox.IsEnabled = false;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SetFieldsStatusUpdate()
         {
-            Close();
+            txtDesc.IsEnabled = false;
+            txtValue.IsEnabled = false;
+            cmbCategory.IsEnabled = false;
+            dpExpense.IsEnabled = false;
+            btnUpdateExpense.IsEnabled = false;
+        }
+
+        private void SetFieldsStatusAdd()
+        {
+            txtDesc.IsEnabled = true;
+            txtValue.IsEnabled = true;
+            dpExpense.IsEnabled = true;
+            btnUpdateExpense.IsEnabled = false;
+            CheckComboBoxNumberOfOptions(cmbCategory);
         }
 
         private bool CheckFieldsGeneral()
@@ -69,8 +93,8 @@ namespace cteds_projeto_final
                 return false;
             }
 
-            float value;
-            if (float.TryParse(txtValue.Text.Trim(), out value) == false || value <= 0)
+            decimal value;
+            if (decimal.TryParse(txtValue.Text.Trim(), out value) == false || value <= 0 || value == decimal.MaxValue)
             {
                 MessageBox.Show("Valor inválido para o gasto!");
                 return false;
@@ -88,13 +112,34 @@ namespace cteds_projeto_final
                 return false;
             }
 
+            return true;
+        }
+
+        private bool CheckFieldsAdd()
+        {
+            if (!CheckFieldsGeneral())
+                return false;
+
             Expense? existingExpense = expenseRepository.GetByDesc(txtDesc.Text.Trim());
             if (existingExpense != null)
             {
                 MessageBox.Show("Já existe um gasto com a mesma descrição!");
                 return false;
             }
+            return true;
+        }
 
+        private bool CheckFieldsUpdate(long? expenseId)
+        {
+            if (!CheckFieldsGeneral())
+                return false;
+            
+            Expense? existingExpense = expenseRepository.GetByDescAndExcludeId(txtDesc.Text.Trim(), expenseId);
+            if (existingExpense != null)
+            {
+                MessageBox.Show("Já existe um gasto com a mesma descrição!");
+                return false;
+            }
             return true;
         }
         private void InsertNewCategory(object sender, RoutedEventArgs e)
@@ -112,22 +157,34 @@ namespace cteds_projeto_final
             cmbCategory.SelectedIndex = -1;
         }
 
-        private Expense FormatFields()
+        private Expense? FormatFields(long? expenseId = null)
         {
+            decimal? convertedValue = ConvertStringToDecimal(txtValue.Text.Trim());
+            if (convertedValue == null)
+                return null;
             Category? category = categoryRepository.GetByName(cmbCategory.SelectedItem.ToString());
             Expense expense = new Expense(
-                value: float.Parse(txtValue.Text.Trim()),
+                value: (decimal) convertedValue,
                 desc: txtDesc.Text.Trim(),
                 category_id: (long) category.categoryId,
                 expense_dttm: (DateTime) dpExpense.SelectedDate,
-                added_dttm: DateTime.Now
+                expenseId: expenseId
             );
             return expense;
         }
 
-        private string ConvertFloatToString(string value)
+        private decimal? ConvertStringToDecimal(string number)
         {
-            return double.Parse(value, NumberStyles.Any, CultureInfo.InvariantCulture).ToString();
+            decimal convertedNumber;
+            bool ok = decimal.TryParse(number, NumberStyles.Any, CultureInfo.CurrentUICulture, out convertedNumber);
+            if (ok)
+                return convertedNumber;
+            return null;
+        }
+
+        private string ConvertDecimalToString(decimal number)
+        {
+            return number.ToString("0." + new string('#', 339)).TrimEnd('0');
         }
 
         private void FillFieldsToEdit(object sender, EventArgs e)
@@ -137,8 +194,10 @@ namespace cteds_projeto_final
             Tuple<Expense?, int> tag = (Tuple<Expense?, int>) clickedButton.Tag;
             Expense? expense = tag.Item1;
             txtDesc.Text = expense.desc;
-            txtValue.Text = ConvertFloatToString(expense.value.ToString());
             dpExpense.SelectedDate = expense.expense_dttm;
+
+            Label valueLabel = (Label) searchGridChild(tag.Item2, 2);
+            txtValue.Text = ConvertDecimalToString(expense.value);
 
             Label categoryLabel = (Label) searchGridChild(tag.Item2, 0);
             string categoryName = categoryLabel.Content.ToString();
@@ -157,6 +216,7 @@ namespace cteds_projeto_final
             txtValue.IsEnabled = true;
             cmbCategory.IsEnabled = true;
             dpExpense.IsEnabled = true;
+            btnUpdateExpense.IsEnabled = true;
         }
 
         private void InsertChildOnExpenseGrid(UIElement child, int row, int col)
@@ -179,11 +239,11 @@ namespace cteds_projeto_final
 
         private void InsertExpenseAttribute(string attribute, int row, int col)
         {
-            Label lblDesc = new Label();
-            lblDesc.Content = attribute;
-            lblDesc.Width = 10 * attribute.Length;
-            lblDesc.Height = 30;
-            InsertChildOnExpenseGrid(lblDesc, row, col);
+            Label lblAttribute = new Label();
+            lblAttribute.Content = attribute.Trim();
+            lblAttribute.Width = 10 * attribute.Length;
+            lblAttribute.Height = 30;
+            InsertChildOnExpenseGrid(lblAttribute, row, col);
         }
 
         private void InsertExpenseOnGrid(Expense expense, int row, double? heightDelta = 20)
@@ -195,9 +255,17 @@ namespace cteds_projeto_final
                 grdExpense.RowDefinitions.Add(new RowDefinition());
                 grdExpense.Height += (double) heightDelta;
             }
+
             InsertExpenseAttribute(categoryName, row, 0);
             InsertExpenseAttribute(expense.desc, row, 1);
-            InsertExpenseAttribute(expense.value.ToString(), row, 2);
+            
+            string formattedValue;
+            if (expense.value > 1000000000000)
+                formattedValue = expense.value.ToString("E", CultureInfo.InvariantCulture);
+            else
+                formattedValue = expense.value.ToString();
+            InsertExpenseAttribute(formattedValue, row, 2);
+
             InsertExpenseAttribute(expense.expense_dttm.ToShortDateString(), row, 3);
             InsertEditionButton(expense, row, 4);
         }
@@ -205,11 +273,16 @@ namespace cteds_projeto_final
         private void updateGridRow(Expense expense, int row)
         {
             UIElementCollection childrenEnumerator = grdExpense.Children;
+            List<UIElement> childrenInRow = new List<UIElement>();
             for (int i = 0; i < childrenEnumerator.Count; i++)
             {
                 if (Grid.GetRow(childrenEnumerator[i]) == row)
-                    grdExpense.Children.Remove(childrenEnumerator[i]);
+                    childrenInRow.Add(childrenEnumerator[i]);
             }
+
+            foreach(UIElement child in childrenInRow)
+                grdExpense.Children.Remove(child);
+
             InsertExpenseOnGrid(expense, row, null);
         }
 
@@ -278,10 +351,8 @@ namespace cteds_projeto_final
 
         private void AddExpense(object sender, RoutedEventArgs e)
         {
-            if (CheckFieldsGeneral())
+            if (CheckFieldsAdd())
             {
-                MessageBox.Show("Todos os dados estão ok!");
-
                 Expense? savedExpense = expenseRepository.AddExpense(FormatFields());
                 if (savedExpense != null)
                 {
@@ -297,7 +368,24 @@ namespace cteds_projeto_final
 
         private void UpdateExpense(object sender, RoutedEventArgs e)
         {
+            Button clickedButton = (Button) sender;
+            Tuple<Expense?, int> tag = (Tuple<Expense?, int>) clickedButton.Tag;
+            Expense? expense = tag.Item1;
+            long? expenseId = expense.expenseId;
 
+            if (CheckFieldsUpdate(expenseId))
+            {
+                Expense? updatedExpense = expenseRepository.UpdateExpense(FormatFields(expenseId));
+                if (updatedExpense != null)
+                {
+                    MessageBox.Show("Gasto atualizado com sucesso!");
+                    updateGridRow(updatedExpense, tag.Item2);
+                    ClearFields();
+                    btnUpdateExpense.IsEnabled = false;
+                }
+                else
+                    MessageBox.Show("Ocorreu um erro na atualização do gasto!");
+            }
         }
     }
 }

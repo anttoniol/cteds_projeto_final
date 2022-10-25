@@ -28,13 +28,14 @@ namespace cteds_projeto_final
 
         private void AddExpense(object sender, RoutedEventArgs e)
         {
-            ExpenseOperations expenseOperations = new ExpenseOperations();
+            ExpenseOperations expenseOperations = new ExpenseOperations("add");
             expenseOperations.Show();
         }
 
         private void UpdateExpense(object sender, RoutedEventArgs e)
         {
-
+            ExpenseOperations expenseOperations = new ExpenseOperations("update");
+            expenseOperations.Show();
         }
 
         private void DeleteExpense(object sender, RoutedEventArgs e)

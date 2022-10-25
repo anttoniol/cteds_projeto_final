@@ -3,6 +3,7 @@ using System.Data.SQLite;
 using cteds_projeto_final.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace cteds_projeto_final.Repositories
 {
@@ -27,7 +28,7 @@ namespace cteds_projeto_final.Repositories
                 {
                     Expense expense = new Expense(
                        expenseId: (long) rdr["id"],
-                       value: float.Parse(rdr["value"].ToString()),
+                       value: (decimal) rdr["value"],
                        desc: rdr["desc"].ToString()!,
                        category_id: (long) rdr["category_id"],
                        added_dttm: Convert.ToDateTime(rdr["added_dttm"]),
@@ -45,7 +46,7 @@ namespace cteds_projeto_final.Repositories
             {
                 Expense expense = new Expense(
                     expenseId: (long) rdr["id"],
-                    value: float.Parse(rdr["value"].ToString()),
+                    value: (decimal) rdr["value"],
                     desc: rdr["desc"].ToString()!,
                     category_id: (long) rdr["category_id"],
                     added_dttm: Convert.ToDateTime(rdr["added_dttm"]),
@@ -80,6 +81,19 @@ namespace cteds_projeto_final.Repositories
             }
         }
 
+        public Expense? GetByDescAndExcludeId(string desc, long? id)
+        {
+            string queryString = "SELECT * FROM expenses WHERE desc = @desc and id != @id";
+            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            {
+                cmd.Parameters.AddWithValue("@desc", desc);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                return ReadExpenseData(rdr);
+            }
+        }
+
         public Expense? GetByDate(DateTime start, DateTime end)
         {
             string queryString = "SELECT * FROM expenses WHERE added_dttm >= @start and added_dttm <= @end";
@@ -102,7 +116,7 @@ namespace cteds_projeto_final.Repositories
                 cmd.Parameters.AddWithValue("@desc", expense.desc);
                 cmd.Parameters.AddWithValue("@category_id", expense.category_id);
                 cmd.Parameters.AddWithValue("@expense_dttm", expense.expense_dttm);
-                cmd.Parameters.AddWithValue("@added_dttm", expense.added_dttm);
+                cmd.Parameters.AddWithValue("@added_dttm", DateTime.Now);
 
                 int numberOfRowsInserted = cmd.ExecuteNonQuery();
                 if (numberOfRowsInserted > 0)
@@ -122,8 +136,8 @@ namespace cteds_projeto_final.Repositories
                 cmd.Parameters.AddWithValue("@category_id", expense.category_id);
                 cmd.Parameters.AddWithValue("@expense_dttm", expense.expense_dttm);
 
-                int numberOfRowsInserted = cmd.ExecuteNonQuery();
-                if (numberOfRowsInserted > 0)
+                int numberOfRowsUpdated = cmd.ExecuteNonQuery();
+                if (numberOfRowsUpdated > 0)
                     return expense;
                 return null;
             }

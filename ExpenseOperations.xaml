@@ -19,11 +19,11 @@
         <ComboBox x:Name="cmbCategory" HorizontalAlignment="Left" Margin="201,81,0,0" VerticalAlignment="Top" Width="255"/>
         <Button Content="Inserir Nova&#xD;&#xA;Categoria " HorizontalAlignment="Left" Height="43" VerticalAlignment="Top" Width="81" Margin="471,68,0,0" Click="InsertNewCategory"/>
         <TextBox x:Name="txtDesc" Margin="201,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351"/>
-        <TextBox x:Name="txtValue" HorizontalAlignment="Left" Margin="201,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154" InputScope="DateMonth"/>
         <DatePicker x:Name="dpExpense" HorizontalAlignment="Left" Margin="402,39,0,0" VerticalAlignment="Top" Width="150"/>
         <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" Width="700" Margin="0,197,0,10">
             <Grid x:Name="grdExpense" ShowGridLines="True" Height="262"/>
         </ScrollViewer>
+        <TextBox x:Name="txtValue" HorizontalAlignment="Left" Margin="205,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="149"/>
     </Grid>
 </Window>
     
