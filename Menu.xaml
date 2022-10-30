@@ -15,7 +15,7 @@
             <MenuItem Header="Gastos">
                 <MenuItem Header="Adicionar" Click="AddExpense"/>
                 <MenuItem Header="Atualizar" Click="UpdateExpense"/>
-                <MenuItem Header="Remover" Click="DeleteExpense"/>
+                <MenuItem Header="Total de gastos" Click="VisualizeExpenseTotal"/>
             </MenuItem>
             <MenuItem Header="Sair" Click="CloseWindow"/>
         </Menu>

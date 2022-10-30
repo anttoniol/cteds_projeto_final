@@ -16,6 +16,60 @@ namespace cteds_projeto_final.Repositories
             conn = connection;
         }
 
+        public List<List<string>> GetExpenseTotalByMonthAndCategory(DateTime begin, DateTime end)
+        {
+            List<List<string>> expenseTotal = new List<List<string>>();
+            string queryString = "SELECT strftime('%m-%Y', expense_dttm) AS expense_dttm_month, categories.name as category_name, " +
+                                    "SUM(value) as expense_total FROM expenses inner join categories on categories.id = expenses.category_id " +
+                                    "WHERE expense_dttm BETWEEN @begin AND @end " +
+                                    "GROUP BY expense_dttm_month, categories.name " +
+                                    "ORDER BY expense_dttm_month";
+                                   
+            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            {
+                cmd.Parameters.AddWithValue("@begin", begin);
+                cmd.Parameters.AddWithValue("@end", end);
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    List<string> expenseTotalRow = new List<string>();
+                    expenseTotalRow.Add(rdr["expense_dttm_month"].ToString());
+                    expenseTotalRow.Add(rdr["category_name"].ToString());
+                    expenseTotalRow.Add(rdr["expense_total"].ToString());
+
+                    expenseTotal.Add(expenseTotalRow);
+                }
+                return expenseTotal;
+            }
+        }
+
+        public List<List<string>> GetExpenseTotalByMonth(DateTime begin, DateTime end)
+        {
+            List<List<string>> expenseTotal = new List<List<string>>();
+            string queryString = "SELECT strftime('%m-%Y', expense_dttm) AS expense_dttm_month, SUM(value) as expense_total FROM expenses WHERE " +
+                                    "expense_dttm BETWEEN @begin AND @end GROUP BY expense_dttm_month";
+            
+            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            {
+                cmd.Parameters.AddWithValue("@begin", begin);
+                cmd.Parameters.AddWithValue("@end", end);
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    List<string> expenseTotalRow = new List<string>();
+                    expenseTotalRow.Add(rdr["expense_dttm_month"].ToString());
+                    expenseTotalRow.Add(rdr["expense_total"].ToString());
+                      
+                    expenseTotal.Add(expenseTotalRow);
+                }
+                return expenseTotal;
+            }
+        }
+
         public List<Expense> GetAll()
         {
             List<Expense> expenseList = new List<Expense>();

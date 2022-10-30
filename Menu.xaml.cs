@@ -38,9 +38,10 @@ namespace cteds_projeto_final
             expenseOperations.Show();
         }
 
-        private void DeleteExpense(object sender, RoutedEventArgs e)
+        private void VisualizeExpenseTotal(object sender, RoutedEventArgs e)
         {
-
+            ExpenseTotal expenseTotal = new ExpenseTotal();
+            expenseTotal.Show();
         }
     }
 }

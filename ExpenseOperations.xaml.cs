@@ -27,8 +27,6 @@ namespace cteds_projeto_final
                     cmbCategory.Items.Add(category.name);
             }
         }        
-
-        private string[] cmbMonthOptions = { "Mês atual", "Meses anteriores" };
         public ExpenseOperations(string operation)
         {
             InitializeComponent();
