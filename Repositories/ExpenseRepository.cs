@@ -145,13 +145,12 @@ namespace cteds_projeto_final.Repositories
 
         public Expense? DeleteExpense(Expense expense)
         {
-            string queryString = "delete from categories WHERE id = @id";
+            string queryString = "delete from expenses WHERE id = @id";
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
                 cmd.Parameters.AddWithValue("@id", expense.expenseId);
-                SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
+                int numberOfRowsUpdated = cmd.ExecuteNonQuery();
+                if (numberOfRowsUpdated > 0)
                     return expense;
                 return null;
             }

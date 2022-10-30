@@ -15,6 +15,7 @@ namespace cteds_projeto_final
     {
         private CategoryRepository categoryRepository;
         private ExpenseRepository expenseRepository;
+        private string operation;
 
         private void FillCmbCategory()
         {
@@ -31,6 +32,7 @@ namespace cteds_projeto_final
         public ExpenseOperations(string operation)
         {
             InitializeComponent();
+            this.operation = operation;
 
             SQLiteConnection? conn = Connection.connectWithDatabase();
             if (Connection.buildDatabaseContent(conn))
@@ -39,14 +41,14 @@ namespace cteds_projeto_final
                 expenseRepository = new ExpenseRepository(conn, categoryRepository);
                 FillCmbCategory();
                 InsertContentIntoExpenseGrid();
-                CheckOperation(operation);
+                CheckOperation();
                 dpExpense.DisplayDateEnd = DateTime.Now;
             }
         }
 
-        private void CheckOperation(string operation)
+        private void CheckOperation()
         {
-            switch (operation)
+            switch (this.operation)
             {
                 case "add":
                     SetFieldsStatusAdd();
@@ -147,7 +149,9 @@ namespace cteds_projeto_final
             CategoryOperations categoryOperations = new CategoryOperations("add");
             categoryOperations.ShowDialog();
             FillCmbCategory();
-        }
+            if (this.operation != "update")
+                CheckComboBoxNumberOfOptions(cmbCategory);
+        } 
 
         private void ClearFields(object sender, RoutedEventArgs e)
         {
@@ -191,23 +195,47 @@ namespace cteds_projeto_final
         {
 
             Button clickedButton = (Button)sender;
-            Tuple<Expense?, int> tag = (Tuple<Expense?, int>) clickedButton.Tag;
+            Tuple<Expense?, int> tag = (Tuple<Expense?, int>)clickedButton.Tag;
             Expense? expense = tag.Item1;
             txtDesc.Text = expense.desc;
             dpExpense.SelectedDate = expense.expense_dttm;
 
-            Label valueLabel = (Label) searchGridChild(tag.Item2, 2);
+            Label valueLabel = (Label)SearchGridChild(tag.Item2, 2);
             txtValue.Text = ConvertDecimalToString(expense.value);
 
-            Label categoryLabel = (Label) searchGridChild(tag.Item2, 0);
+            Label categoryLabel = (Label)SearchGridChild(tag.Item2, 0);
             string categoryName = categoryLabel.Content.ToString();
             cmbCategory.SelectedItem = categoryName;
-            
+
             btnUpdateExpense.Click -= UpdateExpense;
             btnUpdateExpense.Click += UpdateExpense;
             btnUpdateExpense.Tag = tag;
 
             EnableFieldsUpdate();
+        }
+  
+
+        private void FillFieldsToDelete(object sender, EventArgs e)
+        {
+            Button clickedButton = (Button)sender;
+            Tuple<Expense?, int> tag = (Tuple<Expense?, int>) clickedButton.Tag;
+
+            string message = "Você realmente deseja remover esse gasto?";
+            string title = "Remover Gasto";
+            MessageBoxButton buttons = MessageBoxButton.YesNo;
+            MessageBoxResult result = MessageBox.Show(message, title, buttons);
+            if (result == MessageBoxResult.Yes);
+            {
+                if (expenseRepository.DeleteExpense(tag.Item1) != null)
+                {
+                    grdExpense.Children.Clear();
+                    grdExpense.RowDefinitions.Clear();
+                    grdExpense.ColumnDefinitions.Clear();
+                    InsertContentIntoExpenseGrid();
+                }
+            }
+
+            SetFieldsStatusAdd();
         }
 
         private void EnableFieldsUpdate()
@@ -237,6 +265,17 @@ namespace cteds_projeto_final
             InsertChildOnExpenseGrid(button, row, col);
         }
 
+        private void InsertDeletionButton(Expense? expense, int row, int col)
+        {
+            Button button = new Button();
+            button.Content = "Remover";
+            button.Height = 29;
+            button.Width = 64;
+            button.Tag = new Tuple<Expense?, int>(expense, row);
+            button.Click += FillFieldsToDelete;
+            InsertChildOnExpenseGrid(button, row, col);
+        }
+
         private void InsertExpenseAttribute(string attribute, int row, int col)
         {
             Label lblAttribute = new Label();
@@ -248,7 +287,9 @@ namespace cteds_projeto_final
 
         private void InsertExpenseOnGrid(Expense expense, int row, double? heightDelta = 20)
         {
-            string categoryName = categoryRepository.GetById(expense.category_id).name;
+            Console.WriteLine("LEGAL");
+            Category? category = categoryRepository.GetById(expense.category_id);
+            string categoryName = category.name;
 
             if (heightDelta != null)
             {
@@ -268,9 +309,10 @@ namespace cteds_projeto_final
 
             InsertExpenseAttribute(expense.expense_dttm.ToShortDateString(), row, 3);
             InsertEditionButton(expense, row, 4);
+            InsertDeletionButton(expense, row, 5);
         }
 
-        private void updateGridRow(Expense expense, int row)
+        private void UpdateGridRow(Expense expense, int row)
         {
             UIElementCollection childrenEnumerator = grdExpense.Children;
             List<UIElement> childrenInRow = new List<UIElement>();
@@ -286,7 +328,7 @@ namespace cteds_projeto_final
             InsertExpenseOnGrid(expense, row, null);
         }
 
-        private UIElement? searchGridChild(int row, int col)
+        private UIElement? SearchGridChild(int row, int col)
         {
             UIElementCollection childrenEnumerator = grdExpense.Children;
             foreach (UIElement child in childrenEnumerator)
@@ -297,7 +339,7 @@ namespace cteds_projeto_final
             return null;
         }
 
-        private void updateExpenseGrid(Expense expense)
+        private void UpdateExpenseGrid(Expense expense)
         {
             if (expense != null)
             {
@@ -319,7 +361,7 @@ namespace cteds_projeto_final
 
         private void InsertColumnNamesOnExpenseGrid()
         {
-            string[] columns = { "CATEGORIA", "DESCRIÇÃO", "VALOR", "DATA DO GASTO", "EDITAR" };
+            string[] columns = { "CATEGORIA", "DESCRIÇÃO", "VALOR", "DATA DO GASTO", "EDIÇÃO", "REMOÇÃO" };
             grdExpense.RowDefinitions.Add(new RowDefinition());
             for (int i = 0; i < columns.Length; i++)
             {
@@ -357,7 +399,7 @@ namespace cteds_projeto_final
                 if (savedExpense != null)
                 {
                     MessageBox.Show("Gasto adicionado com sucesso!");
-                    updateExpenseGrid(savedExpense);
+                    UpdateExpenseGrid(savedExpense);
                     ClearFields();
                     btnUpdateExpense.IsEnabled = false;
                 }
@@ -379,7 +421,7 @@ namespace cteds_projeto_final
                 if (updatedExpense != null)
                 {
                     MessageBox.Show("Gasto atualizado com sucesso!");
-                    updateGridRow(updatedExpense, tag.Item2);
+                    UpdateGridRow(updatedExpense, tag.Item2);
                     ClearFields();
                     btnUpdateExpense.IsEnabled = false;
                 }
