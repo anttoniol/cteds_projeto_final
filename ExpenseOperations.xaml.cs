@@ -222,7 +222,7 @@ namespace cteds_projeto_final
             string title = "Remover Gasto";
             MessageBoxButton buttons = MessageBoxButton.YesNo;
             MessageBoxResult result = MessageBox.Show(message, title, buttons);
-            if (result == MessageBoxResult.Yes);
+            if (result == MessageBoxResult.Yes)
             {
                 if (expenseRepository.DeleteExpense(tag.Item1) != null)
                 {
