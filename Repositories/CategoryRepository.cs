@@ -3,6 +3,9 @@ using System.Data.SQLite;
 using cteds_projeto_final.Models;
 
 using System;
+using System.Data;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace cteds_projeto_final.Repositories
 {
@@ -15,110 +18,139 @@ namespace cteds_projeto_final.Repositories
             conn = connection;
         }
 
+        private Category ReadCategoryDataAux(SQLiteDataReader rdr)
+        {
+            byte[]? icon;
+            try
+            {
+                icon = (byte[]?)rdr["icon"];
+            }
+            catch
+            {
+                icon = null;
+            }
+
+            DateTime? added_dttm;
+            try
+            {
+                added_dttm = Convert.ToDateTime(rdr["added_dttm"]);
+            }
+            catch
+            {
+                added_dttm = null;
+            }
+
+            Category category = new Category(
+                name: rdr["name"].ToString()!,
+                color: rdr["color"].ToString(),
+                icon: icon,
+                categoryId: (long?)rdr["id"],
+                added_dttm: added_dttm
+            );
+            return category;
+        }
+
+        private Category? ReadCategoryData(SQLiteDataReader rdr)
+        {
+            if (rdr.Read())
+                return ReadCategoryDataAux(rdr);
+            return null;
+        }
+
+        public List<Category> GetAll()
+        {
+            List<Category> categoryList = new List<Category>();
+            string queryString = "SELECT * FROM categories";
+            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            {
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                    categoryList.Add(ReadCategoryDataAux(rdr));
+                return categoryList;
+            }
+        }
+
         public Category? GetById(long id)
         {
-            string queryString = "SELECT * FROM categories WHERE id = @id AND deleted_dttm = DATETIME('0')";
+            string queryString = "SELECT * FROM categories WHERE id = @id";
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
                 cmd.Parameters.AddWithValue("@id", id);
-
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
-                {
-                    Category category = new Category(
-                        categoryId: (long)rdr["id"],
-                        name: rdr["name"].ToString()!,
-                        deleted_dttm: Convert.ToDateTime(rdr["deleted_dttm"])!
-                    );
-                    return category;
-                }
+                return ReadCategoryData(rdr);
             }
-            return null;
+        }
+
+        public Category? GetByNameAndExcludeId(string name, long? id)
+        {
+            string queryString = "SELECT * FROM categories WHERE name LIKE @name and id != @id";
+            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            {
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@id", id);
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                return ReadCategoryData(rdr);
+            }
         }
 
         public Category? GetByName(string name)
         {
-            string queryString = "SELECT * FROM categories WHERE name LIKE @name AND deleted_dttm = DATETIME('0')";
+            string queryString = "SELECT * FROM categories WHERE name LIKE @name";
             using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
             {
                 cmd.Parameters.AddWithValue("@name", name);
-
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
-                {
-                    Category category = new Category(
-                        categoryId: (long)rdr["id"],
-                        name: rdr["name"].ToString()!,
-                        deleted_dttm: Convert.ToDateTime(rdr["deleted_dttm"])
-                    );
-                    return category;
-                }
+                return ReadCategoryData(rdr);
+                return null;
             }
-            return null;
         }
 
         public Category? AddCategory(Category category)
-        {
-            string queryString = "INSERT into categories (name) values (@name)";
-            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+        {   
+            string queryString = "INSERT into categories (name, color, icon, added_dttm) values (@name, @color, @icon, @added_dttm)";
+            try
             {
-                cmd.Parameters.AddWithValue("@name", category.name);
-
-                SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
+                using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
                 {
-                    category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    cmd.Parameters.AddWithValue("@name", category.name);
+                    cmd.Parameters.AddWithValue("@color", category.color);
+                    cmd.Parameters.AddWithValue("@icon", category.icon);
+                    cmd.Parameters.AddWithValue("@added_dttm", DateTime.Now);
 
-                    return category;
+                    int numberOfRowsInserted = cmd.ExecuteNonQuery();
+                    if (numberOfRowsInserted > 0)
+                        return GetByName(category.name);
+                    return null;
                 }
+            } catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
             }
-            return null;
         }
 
         public Category? UpdateCategory(Category category)
         {
-            string queryString = "UPDATE categories set name = @name where id = @id and deleted_dttm = DATETIME('0')";
-            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            string queryString = "UPDATE categories set name = @name, color = @color, icon = @icon where id = @id";
+            try
             {
-
-                cmd.Parameters.AddWithValue("@id", category.categoryId);
-                cmd.Parameters.AddWithValue("@name", category.name);
-
-                SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
+                using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
                 {
-                    category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
+                    cmd.Parameters.AddWithValue("@id", category.categoryId);
+                    cmd.Parameters.AddWithValue("@name", category.name);
+                    cmd.Parameters.AddWithValue("@color", category.color);
+                    cmd.Parameters.AddWithValue("@icon", category.icon);
 
-                    return category;
+                    int numberOfRowsUpdated = cmd.ExecuteNonQuery();
+                    if (numberOfRowsUpdated > 0)
+                        return category;
+                    return null;
                 }
-            }
-            return null;
-        }
-
-        public Category? DeleteCategory(Category category)
-        {
-            string queryString = "UPDATE categories set deleted_dttm = DATETIME('now') where id = @id and deleted_dttm = DATETIME('0')";
-            using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
+            } catch
             {
-                cmd.Parameters.AddWithValue("@id", category.name);
-
-                SQLiteDataReader rdr = cmd.ExecuteReader();
-
-                if(rdr.Read())
-                {
-                    category.categoryId = (long)rdr["id"];
-                    category.deleted_dttm = Convert.ToDateTime(rdr["deleted_dttm"]);
-
-                    return category;
-                }
+                return null;
             }
-            return null;
         }
     }
 }

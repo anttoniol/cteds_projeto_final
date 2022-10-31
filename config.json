@@ -1,0 +1,5 @@
+{
+  "LogLevel": "INFO",
+  "LogPath": "cteds_projeto_final.log",
+  "ConnectionString": "Data Source=cteds_projeto_final.db"
+}
